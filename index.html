@@ -89,6 +89,44 @@
             width: 100%;
         }
 
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: var(--forest);
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                flex-direction: column;
+                background: rgba(245, 241, 232, 0.98);
+                padding: 2rem;
+                gap: 1.5rem;
+                transform: translateY(-100%);
+                opacity: 0;
+                pointer-events: none;
+                transition: all 0.3s;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                transform: translateY(0);
+                opacity: 1;
+                pointer-events: all;
+            }
+        }
+
         /* Hero Section */
         .hero {
             min-height: 100vh;
@@ -216,110 +254,307 @@
             color: var(--forest);
         }
 
+        /* Interactive Demos Section */
+        .interactive-demos {
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, var(--mist) 0%, var(--cream) 100%);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: var(--forest);
+            margin-bottom: 1rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--moss);
+            margin-bottom: 4rem;
+            font-style: italic;
+            opacity: 0.9;
+        }
+
+        .demos-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            padding: 0 1rem;
+        }
+
+        .demo-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(107, 142, 35, 0.1);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .demo-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .demo-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .demo-preview {
+            height: 280px;
+            background: linear-gradient(135deg, var(--sage) 0%, var(--moss) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .demo-preview::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+
+        /* Individual demo color schemes */
+        .demo-pet .demo-preview {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .demo-wellness .demo-preview {
+            background: linear-gradient(135deg, #48c9b0 0%, #6ab7ff 100%);
+        }
+
+        .demo-fleet .demo-preview {
+            background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%);
+        }
+
+        .demo-content {
+            padding: 2.5rem;
+        }
+
+        .demo-category {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            background: var(--mist);
+            color: var(--forest);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .demo-title {
+            font-size: 1.8rem;
+            color: var(--forest);
+            margin-bottom: 1rem;
+            font-weight: 400;
+        }
+
+        .demo-description {
+            color: var(--earth);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        .demo-features {
+            margin: 1.5rem 0;
+            padding: 1.2rem;
+            background: var(--mist);
+            border-radius: 12px;
+            border-left: 3px solid var(--sage);
+        }
+
+        .demo-features h4 {
+            color: var(--forest);
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .demo-features ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .demo-features li {
+            padding: 0.4rem 0;
+            color: var(--earth);
+            font-size: 0.95rem;
+        }
+
+        .demo-features li::before {
+            content: '✓ ';
+            color: var(--sage);
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .demo-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.7rem;
+            margin: 1.5rem 0;
+        }
+
+        .tech-badge {
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 1px solid var(--sage);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--forest);
+            font-weight: 500;
+        }
+
+        .demo-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .demo-btn {
+            flex: 1;
+            padding: 1rem;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+        }
+
+        .demo-btn-primary {
+            background: var(--forest);
+            color: var(--cream);
+        }
+
+        .demo-btn-primary:hover {
+            background: var(--sage);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(107, 142, 35, 0.3);
+        }
+
+        .demo-btn-secondary {
+            background: transparent;
+            color: var(--forest);
+            border: 2px solid var(--forest);
+        }
+
+        .demo-btn-secondary:hover {
+            background: var(--forest);
+            color: var(--cream);
+        }
+
+        .demo-ideal-for {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, rgba(107, 142, 35, 0.05) 0%, rgba(74, 124, 89, 0.05) 100%);
+            border-radius: 10px;
+        }
+
+        .demo-ideal-for h4 {
+            color: var(--moss);
+            font-size: 0.9rem;
+            margin-bottom: 0.7rem;
+            font-weight: 600;
+        }
+
+        .demo-ideal-for p {
+            color: var(--earth);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
         /* Projects Section */
         .projects {
             padding: 6rem 2rem;
             background: var(--mist);
         }
 
-        .section-title {
-            text-align: center;
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: var(--forest);
-            font-weight: 300;
-            letter-spacing: 2px;
-        }
-
-        .section-subtitle {
-            text-align: center;
-            font-size: 1.3rem;
-            color: var(--moss);
-            margin-bottom: 4rem;
-            font-style: italic;
-        }
-
-        .projects-grid {
+        .container {
             max-width: 1200px;
             margin: 0 auto;
+        }
+
+        .project-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2.5rem;
+            margin-top: 3rem;
         }
 
         .project-card {
             background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 5px 20px rgba(45, 80, 22, 0.1);
-            transition: all 0.4s ease;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.08);
+            transition: all 0.4s;
             border: 1px solid rgba(107, 142, 35, 0.1);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .project-card.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .project-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(45, 80, 22, 0.2);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.12);
         }
 
         .project-image {
-            height: 250px;
-            background: linear-gradient(135deg, var(--moss) 0%, var(--sage) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
             font-size: 4rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .project-image::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: shimmer 3s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .project-content {
-            padding: 2.5rem;
+            margin-bottom: 1.5rem;
+            display: block;
         }
 
         .project-title {
             font-size: 1.6rem;
-            margin-bottom: 1rem;
             color: var(--forest);
+            margin-bottom: 1rem;
             font-weight: 400;
         }
 
         .project-description {
             color: var(--earth);
-            margin-bottom: 1.5rem;
             line-height: 1.7;
+            margin-bottom: 1.5rem;
         }
 
         .project-tech {
             display: flex;
             flex-wrap: wrap;
             gap: 0.7rem;
-            margin-top: 1.5rem;
         }
 
         .tech-tag {
-            background: var(--mist);
-            color: var(--moss);
             padding: 0.4rem 1rem;
+            background: var(--mist);
             border-radius: 20px;
             font-size: 0.85rem;
-            font-weight: 400;
-            border: 1px solid var(--sage);
+            color: var(--forest);
+            font-weight: 500;
         }
 
         /* Skills Section */
@@ -328,57 +563,59 @@
             background: white;
         }
 
-        .skills-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
         .skills-intro {
             text-align: center;
             max-width: 800px;
             margin: 0 auto 4rem;
             font-size: 1.2rem;
-            color: var(--earth);
             line-height: 1.8;
+            color: var(--earth);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .skills-intro.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .skills-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 3rem;
-            margin-top: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .skill-category {
             text-align: center;
-            padding: 2rem;
-            border-radius: 20px;
+            padding: 2.5rem;
             background: var(--mist);
-            transition: all 0.4s;
+            border-radius: 15px;
+            transition: all 0.3s;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .skill-category.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .skill-category:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(45, 80, 22, 0.15);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
         .skill-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--moss) 0%, var(--sage) 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.5rem;
-            font-size: 2rem;
-            box-shadow: 0 5px 20px rgba(45, 80, 22, 0.2);
+            font-size: 3rem;
+            margin-bottom: 1rem;
         }
 
         .skill-title {
-            font-size: 1.4rem;
-            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
             color: var(--forest);
+            margin-bottom: 1.5rem;
             font-weight: 400;
         }
 
@@ -391,55 +628,72 @@
         /* About Section */
         .about {
             padding: 6rem 2rem;
-            background: var(--cream);
+            background: linear-gradient(135deg, var(--mist) 0%, var(--cream) 100%);
         }
 
         .about-content {
             max-width: 900px;
-            margin: 0 auto;
+            margin: 3rem auto 0;
         }
 
         .about-text {
-            font-size: 1.3rem;
-            color: var(--earth);
-            line-height: 2;
-            margin-bottom: 2.5rem;
-            text-align: center;
+            font-size: 1.15rem;
+            line-height: 1.9;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .about-text.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .about-highlight {
             background: white;
             padding: 2rem;
-            border-radius: 20px;
-            margin: 2rem 0;
             border-left: 4px solid var(--sage);
+            border-radius: 10px;
+            font-size: 1.25rem;
             font-style: italic;
-            font-size: 1.2rem;
-            color: var(--moss);
+            color: var(--forest);
+            margin: 3rem 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .about-highlight.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .value-prop {
-            background: linear-gradient(135deg, var(--forest) 0%, var(--moss) 100%);
-            padding: 3rem;
-            border-radius: 20px;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
             margin-top: 3rem;
-            box-shadow: 0 10px 40px rgba(45, 80, 22, 0.3);
-            color: var(--cream);
+            box-shadow: 0 5px 30px rgba(0,0,0,0.08);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .value-prop.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .value-prop h3 {
-            color: var(--cream);
-            margin-bottom: 2rem;
+            color: var(--forest);
             font-size: 1.8rem;
-            font-weight: 300;
-            text-align: center;
-            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
+            font-weight: 400;
         }
 
         .value-list {
-            color: var(--cream);
+            color: var(--earth);
             line-height: 2.2;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
         }
 
         /* Contact Section */
@@ -448,40 +702,23 @@
             background: var(--forest);
             color: var(--cream);
             text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .contact::before {
-            content: '🌿';
-            position: absolute;
-            font-size: 20rem;
-            opacity: 0.05;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
         }
 
         .contact .section-title {
             color: var(--cream);
-            position: relative;
-            z-index: 1;
         }
 
         .contact .section-subtitle {
             color: var(--mist);
-            position: relative;
-            z-index: 1;
+            max-width: 600px;
+            margin: 0 auto 3rem;
         }
 
         .contact-buttons {
             display: flex;
-            gap: 2rem;
+            gap: 1.5rem;
             justify-content: center;
-            margin-top: 3rem;
             flex-wrap: wrap;
-            position: relative;
-            z-index: 1;
         }
 
         .contact-btn {
@@ -490,84 +727,55 @@
             color: var(--forest);
             text-decoration: none;
             border-radius: 50px;
-            font-weight: 400;
-            transition: all 0.4s;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            font-weight: 500;
+            transition: all 0.3s;
+            font-size: 1.05rem;
         }
 
         .contact-btn:hover {
-            background: var(--sage);
-            color: var(--cream);
             transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(245, 241, 232, 0.3);
         }
 
         /* Footer */
         footer {
             background: var(--earth);
-            color: var(--mist);
+            color: var(--cream);
             text-align: center;
-            padding: 2.5rem;
+            padding: 2rem;
             font-size: 0.95rem;
         }
 
-        /* Mobile Menu */
-        .mobile-menu {
-            display: none;
-            cursor: pointer;
-            font-size: 1.5rem;
-            color: var(--forest);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: var(--cream);
-                flex-direction: column;
-                padding: 2rem;
-                box-shadow: 0 10px 30px rgba(45, 80, 22, 0.2);
-            }
-
-            .nav-links.active {
-                display: flex;
-            }
-
-            .mobile-menu {
-                display: block;
-            }
-
-            .hero {
-                padding: 6rem 1.5rem 4rem;
-            }
-
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .projects-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .skills-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Scroll animations */
+        /* Fade-in animation class */
         .fade-in {
             opacity: 0;
             transform: translateY(30px);
-            transition: all 0.8s ease;
+            transition: opacity 0.8s ease, transform 0.8s ease;
         }
 
         .fade-in.visible {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .demos-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .demo-buttons {
+                flex-direction: column;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -575,147 +783,267 @@
     <nav>
         <div class="nav-container">
             <a href="#" class="logo">Jennifer Fischer</a>
+            <button class="mobile-menu-btn" id="mobileMenu">☰</button>
             <ul class="nav-links" id="navLinks">
-                <li><a href="#projects">Portfolio</a></li>
-                <li><a href="#skills">Expertise</a></li>
+                <li><a href="#interactive-demos">Interactive Demos</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#skills">Skills</a></li>
                 <li><a href="#about">About</a></li>
-                <li><a href="#contact">Connect</a></li>
+                <li><a href="#contact">Contact</a></li>
             </ul>
-            <div class="mobile-menu" id="mobileMenu">☰</div>
         </div>
     </nav>
 
     <section class="hero">
-        <span class="leaf-pattern leaf-1">🌿</span>
-        <span class="leaf-pattern leaf-2">🍃</span>
-        <span class="leaf-pattern leaf-3">🌿</span>
+        <div class="leaf-pattern leaf-1">🍃</div>
+        <div class="leaf-pattern leaf-2">🌿</div>
+        <div class="leaf-pattern leaf-3">🍂</div>
         <div class="hero-content">
-            <h1>Full-Stack Marketing Technologist</h1>
-            <p class="subtitle">Where Heart Meets Code</p>
+            <h1>Jennifer Fischer</h1>
+            <p class="subtitle">Full-Stack Marketing Technologist</p>
             <p class="hero-description">
-                I don't just build digital experiences—I craft meaningful connections between 
-                businesses and their communities. With roots in both technical mastery and 
-                authentic human connection, I create solutions that resonate from the ground up.
+                I bridge the worlds of code, creativity, and commerce. Where others see separate disciplines,
+                I see an integrated ecosystem where technology serves humanity with intention and heart.
             </p>
-            <p class="hero-quote">
-                "When your heart is in your work, people feel it. When people feel it, businesses grow."
-            </p>
+            <div class="hero-quote">
+                "The most powerful solutions emerge when technical mastery meets genuine care for the people 
+                who will use what we build."
+            </div>
             <div class="btn-group">
-                <a href="#projects" class="btn btn-primary">Explore My Work</a>
+                <a href="#interactive-demos" class="btn btn-primary">See My Interactive Demos</a>
                 <a href="#contact" class="btn btn-secondary">Let's Connect</a>
             </div>
         </div>
     </section>
 
-    <section class="projects" id="projects">
-        <h2 class="section-title">Portfolio</h2>
-        <p class="section-subtitle">Enterprise solutions built with care and precision</p>
+    <section class="interactive-demos" id="interactive-demos">
+        <h2 class="section-title">Live Interactive Demos</h2>
+        <p class="section-subtitle">
+            Experience the power of thoughtfully crafted user journeys—each built to solve real business challenges
+        </p>
         
-        <div class="projects-grid">
-            <div class="project-card fade-in">
-                <div class="project-image">🏖️</div>
-                <div class="project-content">
-                    <h3 class="project-title">Resort Partner Portal</h3>
-                    <p class="project-description">
-                        A comprehensive B2B portal featuring an intuitive Fleet Builder tool, 
-                        sophisticated multi-step forms, and intelligent product recommendations. 
-                        Designed with accessibility and user experience at its heart.
+        <div class="demos-container">
+            <!-- Pet Finder Demo -->
+            <div class="demo-card demo-pet fade-in">
+                <div class="demo-preview">
+                    🐾
+                </div>
+                <div class="demo-content">
+                    <span class="demo-category">Pet Services • Lifestyle</span>
+                    <h3 class="demo-title">Find Your Perfect Pet Match</h3>
+                    <p class="demo-description">
+                        Interactive assessment tool that matches potential pet owners with their ideal companion 
+                        based on lifestyle, living situation, and personality preferences.
                     </p>
-                    <div class="project-tech">
-                        <span class="tech-tag">JavaScript</span>
-                        <span class="tech-tag">HTML/CSS</span>
-                        <span class="tech-tag">Squarespace</span>
-                        <span class="tech-tag">API Integration</span>
+                    
+                    <div class="demo-features">
+                        <h4>What Makes It Special</h4>
+                        <ul>
+                            <li>4-step guided journey with validation</li>
+                            <li>Smart recommendations based on 15+ factors</li>
+                            <li>Detailed care requirements for each pet</li>
+                            <li>Mobile-responsive, playful design</li>
+                        </ul>
+                    </div>
+
+                    <div class="demo-tech">
+                        <span class="tech-badge">JavaScript Logic</span>
+                        <span class="tech-badge">Form Validation</span>
+                        <span class="tech-badge">UX Design</span>
+                        <span class="tech-badge">Responsive</span>
+                    </div>
+
+                    <div class="demo-ideal-for">
+                        <h4>Perfect For:</h4>
+                        <p>Animal shelters, veterinary clinics, pet stores, adoption agencies seeking to improve adoption success rates and engage potential pet owners</p>
+                    </div>
+
+                    <div class="demo-buttons">
+                        <a href="projects/pet-finder/index.html" class="demo-btn demo-btn-primary" target="_blank">Try Live Demo</a>
+                        <a href="https://github.com/Jennifer84-code/pet-finder" class="demo-btn demo-btn-secondary" target="_blank">View Code</a>
                     </div>
                 </div>
             </div>
 
-            <div class="project-card fade-in">
-                <div class="project-image">🏪</div>
-                <div class="project-content">
-                    <h3 class="project-title">Dealer Management System</h3>
-                    <p class="project-description">
-                        Custom portal empowering dealers with personalized dashboards, streamlined 
-                        inventory management, instant marketing resource access, and real-time 
-                        performance insights.
+            <!-- Mental Wellness Demo -->
+            <div class="demo-card demo-wellness fade-in">
+                <div class="demo-preview">
+                    🌱
+                </div>
+                <div class="demo-content">
+                    <span class="demo-category">Health & Wellness • Mental Health</span>
+                    <h3 class="demo-title">Mental Wellness Journey</h3>
+                    <p class="demo-description">
+                        Compassionate digital assessment that creates personalized wellness plans with 
+                        evidence-based recommendations, crisis resources, and supportive guidance.
                     </p>
-                    <div class="project-tech">
-                        <span class="tech-tag">Member Areas</span>
-                        <span class="tech-tag">Custom Forms</span>
-                        <span class="tech-tag">Dashboard UI</span>
-                        <span class="tech-tag">Responsive Design</span>
+                    
+                    <div class="demo-features">
+                        <h4>What Makes It Special</h4>
+                        <ul>
+                            <li>Sensitive, supportive user experience</li>
+                            <li>Personalized wellness recommendations</li>
+                            <li>Built-in crisis support resources</li>
+                            <li>Calming, professional design</li>
+                        </ul>
+                    </div>
+
+                    <div class="demo-tech">
+                        <span class="tech-badge">JavaScript</span>
+                        <span class="tech-badge">UX Psychology</span>
+                        <span class="tech-badge">Accessibility</span>
+                        <span class="tech-badge">Mobile-First</span>
+                    </div>
+
+                    <div class="demo-ideal-for">
+                        <h4>Perfect For:</h4>
+                        <p>Therapists, wellness coaches, corporate wellness programs, mental health clinics, and healthcare providers wanting to offer digital support tools</p>
+                    </div>
+
+                    <div class="demo-buttons">
+                        <a href="projects/wellness-journey/index.html" class="demo-btn demo-btn-primary" target="_blank">Try Live Demo</a>
+                        <a href="https://github.com/Jennifer84-code/wellness-journey" class="demo-btn demo-btn-secondary" target="_blank">View Code</a>
                     </div>
                 </div>
             </div>
 
-            <div class="project-card fade-in">
-                <div class="project-image">⚙️</div>
-                <div class="project-content">
-                    <h3 class="project-title">Fleet Configuration Tool</h3>
-                    <p class="project-description">
-                        A sophisticated multi-step configuration system with intelligent validation, 
-                        dynamic pricing calculations, and personalized recommendations that guide 
-                        customers to their perfect solution.
+            <!-- Fleet Builder Demo -->
+            <div class="demo-card demo-fleet fade-in">
+                <div class="demo-preview">
+                    🚤
+                </div>
+                <div class="demo-content">
+                    <span class="demo-category">B2B Sales • Lead Generation</span>
+                    <h3 class="demo-title">Resort Fleet Builder</h3>
+                    <p class="demo-description">
+                        Professional B2B tool that guides resort partners through building custom pontoon 
+                        fleets with intelligent recommendations and quote generation.
                     </p>
-                    <div class="project-tech">
-                        <span class="tech-tag">JavaScript Logic</span>
-                        <span class="tech-tag">Form Validation</span>
-                        <span class="tech-tag">UX Design</span>
-                        <span class="tech-tag">Data Processing</span>
+                    
+                    <div class="demo-features">
+                        <h4>What Makes It Special</h4>
+                        <ul>
+                            <li>Complex multi-step qualification process</li>
+                            <li>Business needs assessment</li>
+                            <li>Sophisticated lead capture system</li>
+                            <li>Professional B2B presentation</li>
+                        </ul>
+                    </div>
+
+                    <div class="demo-tech">
+                        <span class="tech-badge">JavaScript</span>
+                        <span class="tech-badge">Form Logic</span>
+                        <span class="tech-badge">B2B UX</span>
+                        <span class="tech-badge">Data Processing</span>
+                    </div>
+
+                    <div class="demo-ideal-for">
+                        <h4>Perfect For:</h4>
+                        <p>B2B companies, equipment suppliers, rental businesses, and service providers needing sophisticated lead qualification and product recommendation systems</p>
+                    </div>
+
+                    <div class="demo-buttons">
+                        <a href="projects/fleet-builder/index.html" class="demo-btn demo-btn-primary" target="_blank">Try Live Demo</a>
+                        <a href="https://github.com/Jennifer84-code/fleet-builder" class="demo-btn demo-btn-secondary" target="_blank">View Code</a>
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <div class="project-card fade-in">
-                <div class="project-image">🛍️</div>
-                <div class="project-content">
-                    <h3 class="project-title">Premium E-Commerce Experience</h3>
-                    <p class="project-description">
-                        Transformed basic commerce pages into an immersive, premium shopping 
-                        experience with custom navigation, enhanced functionality, and 
-                        mobile-first design philosophy.
-                    </p>
-                    <div class="project-tech">
-                        <span class="tech-tag">CSS3</span>
-                        <span class="tech-tag">E-Commerce</span>
-                        <span class="tech-tag">UI/UX</span>
-                        <span class="tech-tag">Mobile-First</span>
+    <section class="projects" id="projects">
+        <h2 class="section-title">Project Portfolio</h2>
+        <p class="section-subtitle">Transforming vision into reality, one solution at a time</p>
+        
+        <div class="container">
+            <div class="project-grid">
+                <div class="project-card fade-in">
+                    <div class="project-image">🧭</div>
+                    <div class="project-content">
+                        <h3 class="project-title">Multi-Portal Architecture</h3>
+                        <p class="project-description">
+                            Designed and built three distinct member portals (Dealer, Resort, and Fishing Guide) 
+                            with tailored experiences, custom navigation, and seamless user journeys across 
+                            complex product catalogs.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">JavaScript</span>
+                            <span class="tech-tag">HTML5/CSS3</span>
+                            <span class="tech-tag">Squarespace</span>
+                            <span class="tech-tag">UX Design</span>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="project-card fade-in">
-                <div class="project-image">📸</div>
-                <div class="project-content">
-                    <h3 class="project-title">Visual Brand Strategy</h3>
-                    <p class="project-description">
-                        Complete visual storytelling overhaul including professional photography, 
-                        cohesive graphic design, and authentic brand materials that connect with 
-                        audiences across all channels.
-                    </p>
-                    <div class="project-tech">
-                        <span class="tech-tag">Photography</span>
-                        <span class="tech-tag">Graphic Design</span>
-                        <span class="tech-tag">Brand Strategy</span>
-                        <span class="tech-tag">Content Creation</span>
+                <div class="project-card fade-in">
+                    <div class="project-image">🎯</div>
+                    <div class="project-content">
+                        <h3 class="project-title">Interactive Fleet Builder</h3>
+                        <p class="project-description">
+                            Created sophisticated multi-step forms with conditional logic, 
+                            dynamic pricing calculations, and personalized recommendations that guide 
+                            customers to their perfect solution.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">JavaScript Logic</span>
+                            <span class="tech-tag">Form Validation</span>
+                            <span class="tech-tag">UX Design</span>
+                            <span class="tech-tag">Data Processing</span>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="project-card fade-in">
-                <div class="project-image">💻</div>
-                <div class="project-content">
-                    <h3 class="project-title">Custom Development Projects</h3>
-                    <p class="project-description">
-                        Version-controlled development work featuring custom functionality, 
-                        seamless API integrations, and innovative solutions that transcend 
-                        platform limitations.
-                    </p>
-                    <div class="project-tech">
-                        <span class="tech-tag">GitHub</span>
-                        <span class="tech-tag">Version Control</span>
-                        <span class="tech-tag">Custom Code</span>
-                        <span class="tech-tag">API Development</span>
+                <div class="project-card fade-in">
+                    <div class="project-image">🛍️</div>
+                    <div class="project-content">
+                        <h3 class="project-title">Premium E-Commerce Experience</h3>
+                        <p class="project-description">
+                            Transformed basic commerce pages into an immersive, premium shopping 
+                            experience with custom navigation, enhanced functionality, and 
+                            mobile-first design philosophy.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">CSS3</span>
+                            <span class="tech-tag">E-Commerce</span>
+                            <span class="tech-tag">UI/UX</span>
+                            <span class="tech-tag">Mobile-First</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card fade-in">
+                    <div class="project-image">📸</div>
+                    <div class="project-content">
+                        <h3 class="project-title">Visual Brand Strategy</h3>
+                        <p class="project-description">
+                            Complete visual storytelling overhaul including professional photography, 
+                            cohesive graphic design, and authentic brand materials that connect with 
+                            audiences across all channels.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Photography</span>
+                            <span class="tech-tag">Graphic Design</span>
+                            <span class="tech-tag">Brand Strategy</span>
+                            <span class="tech-tag">Content Creation</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card fade-in">
+                    <div class="project-image">💻</div>
+                    <div class="project-content">
+                        <h3 class="project-title">Custom Development Projects</h3>
+                        <p class="project-description">
+                            Version-controlled development work featuring custom functionality, 
+                            seamless API integrations, and innovative solutions that transcend 
+                            platform limitations.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">GitHub</span>
+                            <span class="tech-tag">Version Control</span>
+                            <span class="tech-tag">Custom Code</span>
+                            <span class="tech-tag">API Development</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -832,8 +1160,8 @@
         </p>
         <div class="contact-buttons">
             <a href="mailto:jenniferfischer8484@gmail.com" class="contact-btn">Email Me</a>
-            <a href="https://www.linkedin.com/in/jennifer-b-435540329/" class="contact-btn">LinkedIn</a>
-            <a href="https://github.com/Jennifer84-code" class="contact-btn">GitHub</a>
+            <a href="https://www.linkedin.com/in/jennifer-b-435540329/" class="contact-btn" target="_blank">LinkedIn</a>
+            <a href="https://github.com/Jennifer84-code" class="contact-btn" target="_blank">GitHub</a>
         </div>
     </section>
 
