@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resort Fleet Builder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .fleet-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%);
+            color: white;
+            padding: 50px 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+        .content {
+            padding: 50px 40px;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 25px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #e0e0e0;
+            z-index: 0;
+        }
+
+        .step {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            color: #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-weight: 700;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-circle {
+            background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .step.completed .step-circle {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.9em;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .step.active .step-label {
+            color: #D4AF37;
+            font-weight: 600;
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        .section-title {
+            color: #1a1a2e;
+            font-size: 2em;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .section-description {
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 35px;
+            line-height: 1.7;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-size: 1.05em;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1.05em;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #D4AF37;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .radio-group,
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .radio-option,
+        .checkbox-option {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .radio-option:hover,
+        .checkbox-option:hover {
+            border-color: #D4AF37;
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .radio-option input,
+        .checkbox-option input {
+            margin-right: 10px;
+            width: auto;
+            accent-color: #D4AF37;
+        }
+
+        .radio-option label,
+        .checkbox-option label {
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .btn {
+            padding: 15px 35px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.05em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .btn-back:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #D4AF37 0%, #B8941F 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(184, 148, 31, 0.1) 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border-left: 5px solid #D4AF37;
+        }
+
+        .summary-card h3 {
+            color: #1a1a2e;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .summary-value {
+            color: #1a1a2e;
+            font-weight: 600;
+        }
+
+        .success-message {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .success-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+
+        .success-message h2 {
+            color: #4CAF50;
+            font-size: 2.2em;
+            margin-bottom: 15px;
+        }
+
+        .success-message p {
+            color: #666;
+            font-size: 1.2em;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 30px 20px;
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .progress-steps {
+                flex-wrap: wrap;
+            }
+
+            .radio-group,
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="fleet-container">
+    <div class="header">
+        <h1>🚤 Resort Fleet Builder</h1>
+        <p>Build your perfect pontoon fleet in 4 easy steps. We'll help you find the ideal boats for your resort's needs.</p>
+    </div>
+
+    <div class="content">
+        <div class="progress-steps">
+            <div class="step active" id="step1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Resort Info</div>
+            </div>
+            <div class="step" id="step2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Fleet Needs</div>
+            </div>
+            <div class="step" id="step3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Preferences</div>
+            </div>
+            <div class="step" id="step4">
+                <div class="step-circle">4</div>
+                <div class="step-label">Review</div>
+            </div>
+        </div>
+
+        <!-- Step 1: Resort Information -->
+        <div class="form-section active" id="section1">
+            <h2 class="section-title">Tell Us About Your Resort</h2>
+            <p class="section-description">Let's start with some basic information about your resort and location.</p>
+
+            <div class="form-group">
+                <label for="resortName">Resort Name *</label>
+                <input type="text" id="resortName" placeholder="Enter your resort name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="location">Location *</label>
+                <input type="text" id="location" placeholder="City, State" required>
+            </div>
+
+            <div class="form-group">
+                <label for="waterType">Type of Water Body *</label>
+                <select id="waterType" required>
+                    <option value="">Select water type</option>
+                    <option value="lake">Lake</option>
+                    <option value="river">River</option>
+                    <option value="ocean">Ocean/Coastal</option>
+                    <option value="bay">Bay</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="contactName">Contact Name *</label>
+                <input type="text" id="contactName" placeholder="Your full name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" placeholder="your.email@resort.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number *</label>
+                <input type="tel" id="phone" placeholder="(555) 123-4567" required>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-back" onclick="goBack()" style="visibility: hidden;">← Back</button>
+                <button class="btn btn-next" onclick="nextStep()">Next: Fleet Needs →</button>
+            </div>
+        </div>
+
+        <!-- Step 2: Fleet Needs -->
+        <div class="form-section" id="section2">
+            <h2 class="section-title">Your Fleet Requirements</h2>
+            <p class="section-description">Help us understand your operational needs and fleet size.</p>
+
+            <div class="form-group">
+                <label>How many boats do you need? *</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" name="fleetSize" value="1-5" id="fleet1">
+                        <label for="fleet1">1-5 boats</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="fleetSize" value="6-10" id="fleet2">
+                        <label for="fleet2">6-10 boats</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="fleetSize" value="11-20" id="fleet3">
+                        <label for="fleet3">11-20 boats</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="fleetSize" value="20+" id="fleet4">
+                        <label for="fleet4">20+ boats</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Primary use for the fleet? *</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" name="primaryUse" value="rental" id="use1">
+                        <label for="use1">Guest Rentals</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="primaryUse" value="tours" id="use2">
+                        <label for="use2">Guided Tours</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="primaryUse" value="fishing" id="use3">
+                        <label for="use3">Fishing Charters</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="primaryUse" value="mixed" id="use4">
+                        <label for="use4">Mixed Use</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Average guest capacity needed per boat? *</label>
+                <select id="capacity" required>
+                    <option value="">Select capacity</option>
+                    <option value="2-4">2-4 people</option>
+                    <option value="4-6">4-6 people</option>
+                    <option value="6-8">6-8 people</option>
+                    <option value="8-10">8-10 people</option>
+                    <option value="10+">10+ people</option>
+                </select>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-back" onclick="goBack()">← Back</button>
+                <button class="btn btn-next" onclick="nextStep()">Next: Preferences →</button>
+            </div>
+        </div>
+
+        <!-- Step 3: Preferences -->
+        <div class="form-section" id="section3">
+            <h2 class="section-title">Features & Preferences</h2>
+            <p class="section-description">Select the features that matter most to your operation.</p>
+
+            <div class="form-group">
+                <label>What features are important? (Select all that apply)</label>
+                <div class="checkbox-group">
+                    <div class="checkbox-option">
+                        <input type="checkbox" name="features" value="bimini" id="feat1">
+                        <label for="feat1">Bimini Top</label>
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" name="features" value="sound" id="feat2">
+                        <label for="feat2">Sound System</label>
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" name="features" value="fishing" id="feat3">
+                        <label for="feat3">Fishing Package</label>
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" name="features" value="grill" id="feat4">
+                        <label for="feat4">Grill Package</label>
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" name="features" value="storage" id="feat5">
+                        <label for="feat5">Extra Storage</label>
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" name="features" value="seating" id="feat6">
+                        <label for="feat6">Premium Seating</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="budget">Budget Range *</label>
+                <select id="budget" required>
+                    <option value="">Select budget range</option>
+                    <option value="50k-100k">$50,000 - $100,000</option>
+                    <option value="100k-250k">$100,000 - $250,000</option>
+                    <option value="250k-500k">$250,000 - $500,000</option>
+                    <option value="500k+">$500,000+</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="timeline">When do you need the fleet? *</label>
+                <select id="timeline" required>
+                    <option value="">Select timeline</option>
+                    <option value="immediate">Immediately (within 1 month)</option>
+                    <option value="3months">Within 3 months</option>
+                    <option value="6months">Within 6 months</option>
+                    <option value="planning">Just planning ahead</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="notes">Additional Notes or Special Requirements</label>
+                <textarea id="notes" placeholder="Tell us anything else we should know about your needs..."></textarea>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-back" onclick="goBack()">← Back</button>
+                <button class="btn btn-next" onclick="nextStep()">Review Your Fleet →</button>
+            </div>
+        </div>
+
+        <!-- Step 4: Review & Submit -->
+        <div class="form-section" id="section4">
+            <h2 class="section-title">Review Your Fleet Configuration</h2>
+            <p class="section-description">Please review your information before submitting.</p>
+
+            <div id="summaryContainer">
+                <!-- Summary will be inserted here -->
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-back" onclick="goBack()">← Back to Edit</button>
+                <button class="btn btn-next" onclick="submitFleet()">Submit Fleet Request →</button>
+            </div>
+        </div>
+
+        <!-- Success Message -->
+        <div class="form-section" id="success">
+            <div class="success-message">
+                <div class="success-icon">✅</div>
+                <h2>Fleet Request Submitted!</h2>
+                <p>Thank you for your interest in building your resort fleet. A member of our team will contact you within 24 hours to discuss your custom pontoon solution.</p>
+                <p style="margin-top: 20px;"><strong>We'll be in touch soon!</strong></p>
+                <button class="btn btn-next" onclick="startOver()" style="margin-top: 30px;">Submit Another Request</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentStep = 1;
+const totalSteps = 4;
+
+function nextStep() {
+    if (!validateStep(currentStep)) {
+        return;
+    }
+
+    if (currentStep === 3) {
+        showSummary();
+    }
+
+    document.getElementById(`section${currentStep}`).classList.remove('active');
+    document.getElementById(`step${currentStep}`).classList.remove('active');
+    document.getElementById(`step${currentStep}`).classList.add('completed');
+
+    currentStep++;
+
+    document.getElementById(`section${currentStep}`).classList.add('active');
+    document.getElementById(`step${currentStep}`).classList.add('active');
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goBack() {
+    document.getElementById(`section${currentStep}`).classList.remove('active');
+    document.getElementById(`step${currentStep}`).classList.remove('active');
+
+    currentStep--;
+
+    document.getElementById(`section${currentStep}`).classList.add('active');
+    document.getElementById(`step${currentStep}`).classList.add('active');
+    document.getElementById(`step${currentStep}`).classList.remove('completed');
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function validateStep(step) {
+    let isValid = true;
+    let message = '';
+
+    switch(step) {
+        case 1:
+            const resortName = document.getElementById('resortName').value;
+            const location = document.getElementById('location').value;
+            const waterType = document.getElementById('waterType').value;
+            const contactName = document.getElementById('contactName').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+
+            if (!resortName || !location || !waterType || !contactName || !email || !phone) {
+                message = 'Please fill in all required fields.';
+                isValid = false;
+            }
+            break;
+
+        case 2:
+            const fleetSize = document.querySelector('input[name="fleetSize"]:checked');
+            const primaryUse = document.querySelector('input[name="primaryUse"]:checked');
+            const capacity = document.getElementById('capacity').value;
+
+            if (!fleetSize || !primaryUse || !capacity) {
+                message = 'Please complete all fleet requirement fields.';
+                isValid = false;
+            }
+            break;
+
+        case 3:
+            const budget = document.getElementById('budget').value;
+            const timeline = document.getElementById('timeline').value;
+
+            if (!budget || !timeline) {
+                message = 'Please select your budget and timeline.';
+                isValid = false;
+            }
+            break;
+    }
+
+    if (!isValid) {
+        alert(message);
+    }
+
+    return isValid;
+}
+
+function showSummary() {
+    const resortName = document.getElementById('resortName').value;
+    const location = document.getElementById('location').value;
+    const waterType = document.getElementById('waterType').value;
+    const contactName = document.getElementById('contactName').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const fleetSize = document.querySelector('input[name="fleetSize"]:checked')?.value || '';
+    const primaryUse = document.querySelector('input[name="primaryUse"]:checked')?.value || '';
+    const capacity = document.getElementById('capacity').value;
+    const features = Array.from(document.querySelectorAll('input[name="features"]:checked')).map(cb => cb.value);
+    const budget = document.getElementById('budget').value;
+    const timeline = document.getElementById('timeline').value;
+    const notes = document.getElementById('notes').value;
+
+    const summaryHTML = `
+        <div class="summary-card">
+            <h3>Resort Information</h3>
+            <div class="summary-item">
+                <span class="summary-label">Resort Name:</span>
+                <span class="summary-value">${resortName}</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Location:</span>
+                <span class="summary-value">${location}</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Water Type:</span>
+                <span class="summary-value">${waterType}</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Contact:</span>
+                <span class="summary-value">${contactName}</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Email:</span>
+                <span class="summary-value">${email}</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Phone:</span>
+                <span class="summary-value">${phone}</span>
+            </div>
+        </div>
+
+        <div class="summary-card">
+            <h3>Fleet Configuration</h3>
+            <div class="summary-item">
+                <span class="summary-label">Fleet Size:</span>
+                <span class="summary-value">${fleetSize} boats</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Primary Use:</span>
+                <span class="summary-value">${primaryUse}</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Capacity:</span>
+                <span class="summary-value">${capacity} people</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Features:</span>
+                <span class="summary-value">${features.length > 0 ? features.join(', ') : 'None selected'}</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Budget:</span>
+                <span class="summary-value">${budget}</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Timeline:</span>
+                <span class="summary-value">${timeline}</span>
+            </div>
+            ${notes ? `
+            <div class="summary-item">
+                <span class="summary-label">Notes:</span>
+                <span class="summary-value">${notes}</span>
+            </div>
+            ` : ''}
+        </div>
+    `;
+
+    document.getElementById('summaryContainer').innerHTML = summaryHTML;
+}
+
+function submitFleet() {
+    document.getElementById('section4').classList.remove('active');
+    document.getElementById('step4').classList.add('completed');
+    document.getElementById('success').classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function startOver() {
+    // Reset all form fields
+    document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], textarea').forEach(input => {
+        input.value = '';
+    });
+    document.querySelectorAll('select').forEach(select => {
+        select.selectedIndex = 0;
+    });
+    document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(input => {
+        input.checked = false;
+    });
+
+    // Reset steps
+    currentStep = 1;
+    document.querySelectorAll('.form-section').forEach(section => {
+        section.classList.remove('active');
+    });
+    document.querySelectorAll('.step').forEach(step => {
+        step.classList.remove('active', 'completed');
+    });
+
+    document.getElementById('section1').classList.add('active');
+    document.getElementById('step1').classList.add('active');
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>
