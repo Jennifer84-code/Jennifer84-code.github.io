@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Senior Living Decision Guide | Jennifer Berg</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #7d1d3f;
+            --primary-light: #a4133c;
+            --bg: #fafafa;
+            --card: #ffffff;
+            --text: #2c2c2c;
+            --text-light: #666666;
+            --border: #e0e0e0;
+            --success: #2d5016;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.15rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: var(--border);
+            border-radius: 10px;
+            margin-bottom: 3rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .question-card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border: 1px solid var(--border);
+            display: none;
+        }
+
+        .question-card.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-number {
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .question-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+            line-height: 1.4;
+        }
+
+        .question-help {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .option {
+            padding: 1.25rem 1.5rem;
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+
+        .option:hover {
+            border-color: var(--primary);
+            background: var(--card);
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            border-color: var(--primary);
+            background: var(--card);
+            box-shadow: 0 2px 8px rgba(125, 29, 63, 0.15);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(125, 29, 63, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-light);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-light);
+            color: var(--text);
+        }
+
+        .results {
+            display: none;
+        }
+
+        .results.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .result-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 3rem 2.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .result-header h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .result-header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+        .recommendation-card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            border: 2px solid var(--border);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .recommendation-card.primary {
+            border-color: var(--primary);
+            background: linear-gradient(to right, rgba(125, 29, 63, 0.03), transparent);
+        }
+
+        .rec-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .rec-badge {
+            background: var(--primary);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+
+        .rec-description {
+            color: var(--text);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        .rec-features {
+            margin-bottom: 1.5rem;
+        }
+
+        .rec-features h4 {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .rec-features ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .rec-features li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: var(--text);
+        }
+
+        .rec-features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        .next-steps {
+            background: var(--bg);
+            padding: 2rem;
+            border-radius: 8px;
+            margin-top: 3rem;
+        }
+
+        .next-steps h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .next-steps ol {
+            padding-left: 1.5rem;
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        .next-steps li {
+            margin-bottom: 0.75rem;
+        }
+
+        .restart-btn {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 1rem 2.5rem;
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .restart-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .footer-credit {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .footer-credit a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .question-card {
+                padding: 1.5rem;
+            }
+
+            .question-text {
+                font-size: 1.25rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Senior Living Decision Guide</h1>
+            <p>
+                Making decisions about senior living can feel overwhelming. This guide will help you 
+                explore your options through a few simple questions, providing personalized recommendations 
+                based on your unique situation and needs.
+            </p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar"></div>
+        </div>
+
+        <!-- Question 1 -->
+        <div class="question-card active" data-question="1">
+            <div class="question-number">Question 1 of 5</div>
+            <h2 class="question-text">What level of daily assistance is needed?</h2>
+            <p class="question-help">
+                Think about everyday activities like bathing, dressing, meal preparation, and medication management.
+            </p>
+            <div class="options">
+                <div class="option" data-value="independent">
+                    <strong>Minimal to no assistance</strong> - Independent living with occasional help
+                </div>
+                <div class="option" data-value="some-help">
+                    <strong>Some assistance</strong> - Help with a few daily tasks, but mostly independent
+                </div>
+                <div class="option" data-value="regular-help">
+                    <strong>Regular assistance</strong> - Daily help with multiple activities
+                </div>
+                <div class="option" data-value="full-care">
+                    <strong>Full-time care</strong> - Comprehensive support with most daily activities
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-primary" id="next1" disabled>Next</button>
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question-card" data-question="2">
+            <div class="question-number">Question 2 of 5</div>
+            <h2 class="question-text">How important is social engagement and activities?</h2>
+            <p class="question-help">
+                Consider preferences for community events, group activities, and opportunities to stay socially connected.
+            </p>
+            <div class="options">
+                <div class="option" data-value="very-social">
+                    <strong>Very important</strong> - Prefers a vibrant community with many activities
+                </div>
+                <div class="option" data-value="moderately-social">
+                    <strong>Moderately important</strong> - Enjoys some activities but values quiet time too
+                </div>
+                <div class="option" data-value="low-social">
+                    <strong>Less important</strong> - Prefers a quieter, more private environment
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-secondary" id="back2">Back</button>
+                <button class="btn btn-primary" id="next2" disabled>Next</button>
+            </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question-card" data-question="3">
+            <div class="question-number">Question 3 of 5</div>
+            <h2 class="question-text">Are there specific health or medical needs to consider?</h2>
+            <p class="question-help">
+                This helps identify communities with appropriate medical support and specialized care services.
+            </p>
+            <div class="options">
+                <div class="option" data-value="memory-care">
+                    <strong>Memory care needs</strong> - Alzheimer's or dementia support
+                </div>
+                <div class="option" data-value="chronic-conditions">
+                    <strong>Chronic health conditions</strong> - Ongoing medical management required
+                </div>
+                <div class="option" data-value="mobility">
+                    <strong>Mobility challenges</strong> - Wheelchair accessible environment needed
+                </div>
+                <div class="option" data-value="general-health">
+                    <strong>Generally healthy</strong> - No significant medical concerns
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-secondary" id="back3">Back</button>
+                <button class="btn btn-primary" id="next3" disabled>Next</button>
+            </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question-card" data-question="4">
+            <div class="question-number">Question 4 of 5</div>
+            <h2 class="question-text">What's your timeline for making this transition?</h2>
+            <p class="question-help">
+                Understanding urgency helps prioritize immediate availability versus exploring all options.
+            </p>
+            <div class="options">
+                <div class="option" data-value="immediate">
+                    <strong>Immediate</strong> - Within 1-3 months
+                </div>
+                <div class="option" data-value="soon">
+                    <strong>Soon</strong> - Within 3-6 months
+                </div>
+                <div class="option" data-value="planning">
+                    <strong>Planning ahead</strong> - 6+ months or just exploring options
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-secondary" id="back4">Back</button>
+                <button class="btn btn-primary" id="next4" disabled>Next</button>
+            </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question-card" data-question="5">
+            <div class="question-number">Question 5 of 5</div>
+            <h2 class="question-text">What's most important in choosing a community?</h2>
+            <p class="question-help">
+                This helps us understand your priorities and values in making this decision.
+            </p>
+            <div class="options">
+                <div class="option" data-value="quality-care">
+                    <strong>Quality of care</strong> - Staff training, medical support, care standards
+                </div>
+                <div class="option" data-value="community">
+                    <strong>Community and culture</strong> - Feeling at home, making connections
+                </div>
+                <div class="option" data-value="location">
+                    <strong>Location</strong> - Close to family, familiar area, accessibility
+                </div>
+                <div class="option" data-value="value">
+                    <strong>Value and affordability</strong> - Transparent pricing, financial options
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-secondary" id="back5">Back</button>
+                <button class="btn btn-primary" id="submit">See Recommendations</button>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results" id="results">
+            <div class="result-header">
+                <h2>Your Personalized Recommendations</h2>
+                <p>
+                    Based on your responses, here are the senior living options that may be the best fit. 
+                    Every situation is unique, and we're here to help you find the right path forward.
+                </p>
+            </div>
+
+            <div id="recommendationsContainer"></div>
+
+            <div class="next-steps">
+                <h3>Recommended Next Steps</h3>
+                <ol>
+                    <li>Schedule tours of communities that match your needs (virtual or in-person)</li>
+                    <li>Prepare questions about care services, activities, and daily life</li>
+                    <li>Review financial options and discuss budget considerations</li>
+                    <li>Involve family members in the decision-making process</li>
+                    <li>Request detailed information packets from your top choices</li>
+                </ol>
+            </div>
+
+            <button class="restart-btn" onclick="restartGuide()">Start Over</button>
+        </div>
+
+        <div class="footer-credit">
+            Interactive assessment designed by <a href="../../index.html">Jennifer Berg</a> | 
+            Demonstrating empathy-driven content strategy for healthcare marketing
+        </div>
+    </div>
+
+    <script>
+        const responses = {};
+        let currentQuestion = 1;
+
+        // Recommendations database
+        const recommendations = {
+            'independent-living': {
+                title: 'Independent Living Community',
+                badge: 'Top Match',
+                description: 'Independent living communities offer private apartments or homes with access to social activities, dining services, and light housekeeping. Residents maintain their independence while enjoying a vibrant community and freedom from home maintenance.',
+                features: [
+                    'Private apartment or cottage living',
+                    'Restaurant-style dining with flexible meal plans',
+                    'Robust activities calendar and social events',
+                    'Housekeeping and maintenance included',
+                    'Transportation services available',
+                    'Emergency call systems for peace of mind'
+                ]
+            },
+            'assisted-living': {
+                title: 'Assisted Living',
+                badge: 'Recommended',
+                description: 'Assisted living provides personalized support with daily activities while promoting independence and dignity. Professional staff is available 24/7 to assist with medication management, bathing, dressing, and other personal care needs.',
+                features: [
+                    'Personalized care plans tailored to individual needs',
+                    'Assistance with daily activities as needed',
+                    '24/7 trained staff availability',
+                    'Medication management support',
+                    'Three nutritious meals daily plus snacks',
+                    'Engaging activities and social programs'
+                ]
+            },
+            'memory-care': {
+                title: 'Memory Care',
+                badge: 'Specialized',
+                description: 'Memory care communities provide specialized support for individuals with Alzheimer\'s disease, dementia, or other memory-related conditions. These secure environments are designed with safety, routine, and meaningful engagement in mind.',
+                features: [
+                    'Secured environment designed for safety and comfort',
+                    'Staff specially trained in dementia care',
+                    'Structured daily routines and activities',
+                    'Memory-enhancing programs and therapies',
+                    'Family support and education resources',
+                    'Small group settings for personalized attention'
+                ]
+            },
+            'nursing-care': {
+                title: 'Skilled Nursing Care',
+                badge: 'Medical Focus',
+                description: 'Skilled nursing facilities provide comprehensive medical care and 24-hour nursing support for individuals with complex health needs. These communities offer rehabilitation services, chronic condition management, and end-of-life care in a compassionate environment.',
+                features: [
+                    'Licensed nurses on staff 24/7',
+                    'Physical, occupational, and speech therapy',
+                    'Complex medical care management',
+                    'Rehabilitation services',
+                    'Physician oversight and regular monitoring',
+                    'Private and semi-private room options'
+                ]
+            },
+            'continuing-care': {
+                title: 'Continuing Care Retirement Community (CCRC)',
+                badge: 'Comprehensive',
+                description: 'CCRCs offer a continuum of care on one campus, allowing residents to transition between levels of care as needs change without relocating. Start in independent living and access assisted living or nursing care when needed.',
+                features: [
+                    'Multiple levels of care on one campus',
+                    'Seamless transitions as needs change',
+                    'Active, resort-style independent living',
+                    'Access to healthcare services on-site',
+                    'Long-term care coverage options',
+                    'Vibrant community with diverse amenities'
+                ]
+            }
+        };
+
+        // Handle option selection
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                const question = this.closest('.question-card').dataset.question;
+                const options = this.closest('.options');
+                
+                options.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                responses[`q${question}`] = this.dataset.value;
+                
+                const nextBtn = document.getElementById(`next${question}`) || document.getElementById('submit');
+                nextBtn.disabled = false;
+            });
+        });
+
+        // Navigation functions
+        function showQuestion(num) {
+            document.querySelectorAll('.question-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            document.querySelector(`[data-question="${num}"]`).classList.add('active');
+            
+            currentQuestion = num;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const progress = (currentQuestion / 5) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+
+        // Next button handlers
+        document.getElementById('next1').addEventListener('click', () => showQuestion(2));
+        document.getElementById('next2').addEventListener('click', () => showQuestion(3));
+        document.getElementById('next3').addEventListener('click', () => showQuestion(4));
+        document.getElementById('next4').addEventListener('click', () => showQuestion(5));
+
+        // Back button handlers
+        document.getElementById('back2').addEventListener('click', () => showQuestion(1));
+        document.getElementById('back3').addEventListener('click', () => showQuestion(2));
+        document.getElementById('back4').addEventListener('click', () => showQuestion(3));
+        document.getElementById('back5').addEventListener('click', () => showQuestion(4));
+
+        // Submit and show results
+        document.getElementById('submit').addEventListener('click', () => {
+            generateRecommendations();
+            document.querySelectorAll('.question-card').forEach(card => card.style.display = 'none');
+            document.getElementById('progressBar').style.width = '100%';
+            document.getElementById('results').classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        function generateRecommendations() {
+            const container = document.getElementById('recommendationsContainer');
+            container.innerHTML = '';
+
+            let primaryRecs = [];
+            let secondaryRecs = [];
+
+            // Logic to determine recommendations based on responses
+            const careLevel = responses.q1;
+            const healthNeeds = responses.q3;
+
+            if (healthNeeds === 'memory-care') {
+                primaryRecs.push('memory-care');
+                secondaryRecs.push('assisted-living');
+            } else if (careLevel === 'independent') {
+                primaryRecs.push('independent-living');
+                secondaryRecs.push('continuing-care');
+            } else if (careLevel === 'full-care') {
+                primaryRecs.push('nursing-care');
+                secondaryRecs.push('assisted-living');
+            } else {
+                primaryRecs.push('assisted-living');
+                secondaryRecs.push('independent-living', 'continuing-care');
+            }
+
+            // Render primary recommendation
+            primaryRecs.forEach(recKey => {
+                const rec = recommendations[recKey];
+                container.innerHTML += `
+                    <div class="recommendation-card primary">
+                        <h3 class="rec-title">
+                            ${rec.title}
+                            <span class="rec-badge">${rec.badge}</span>
+                        </h3>
+                        <p class="rec-description">${rec.description}</p>
+                        <div class="rec-features">
+                            <h4>Key Features:</h4>
+                            <ul>
+                                ${rec.features.map(f => `<li>${f}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Render secondary recommendations
+            secondaryRecs.slice(0, 2).forEach(recKey => {
+                const rec = recommendations[recKey];
+                container.innerHTML += `
+                    <div class="recommendation-card">
+                        <h3 class="rec-title">${rec.title}</h3>
+                        <p class="rec-description">${rec.description}</p>
+                        <div class="rec-features">
+                            <h4>Key Features:</h4>
+                            <ul>
+                                ${rec.features.map(f => `<li>${f}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function restartGuide() {
+            Object.keys(responses).forEach(key => delete responses[key]);
+            currentQuestion = 1;
+            
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            document.querySelectorAll('.btn-primary').forEach(btn => btn.disabled = true);
+            document.getElementById('submit').disabled = true;
+            
+            document.getElementById('results').classList.remove('active');
+            document.querySelectorAll('.question-card').forEach(card => card.style.display = 'block');
+            showQuestion(1);
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialize
+        updateProgress();
+    </script>
+</body>
+</html>
